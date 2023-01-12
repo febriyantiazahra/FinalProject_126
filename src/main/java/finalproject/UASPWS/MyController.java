@@ -10,11 +10,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpEntity;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -27,33 +29,40 @@ import org.springframework.web.bind.annotation.RestController;
 public class MyController {
     UaspwsJpaController dctrl = new UaspwsJpaController();
     
-    @PostMapping("/POST")
-    public String sendData(HttpEntity<String> kiriman) throws Exception {
-        Uaspws datas = new Uaspws();
-        String message = kiriman.getBody();
+    @RequestMapping(value ="/POST", method = RequestMethod.POST, consumes = APPLICATION_JSON_VALUE)
+    public String sendData(HttpEntity<String> kiriman) throws Exception{
+        String message="no action";
+        String json_receive = kiriman.getBody();
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        dctrl.create(datas);
+        Uaspws data = new Uaspws(); //jika ingin banyak data pake List atau ArrayList
+        data = mapper.readValue(json_receive, Uaspws.class);
+        dctrl.create(data);
+        message = data.getName()+" Saved";
         return message;
     }
     
-    @PutMapping("/PUT")
-    public String editData(HttpEntity<String> kiriman) throws Exception {
-        Uaspws datas = new Uaspws();
-        String message = kiriman.getBody();
+    @RequestMapping(value ="/PUT", method = RequestMethod.PUT, consumes = APPLICATION_JSON_VALUE)
+    public String editData(HttpEntity<String> kiriman) throws Exception{
+        String message="no action";
+        String json_receive = kiriman.getBody();
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        dctrl.edit(datas);
+        Uaspws newdatas = new Uaspws(); //jika ingin banyak data pake List atau ArrayList
+        
+        newdatas = mapper.readValue(json_receive, Uaspws.class);
+        try {dctrl.edit(newdatas);} catch (Exception e){}
+        message = newdatas.getName()+" Saved";
         return message;
     }
     
-    @DeleteMapping("/DELETE")
-    public String deleteData(HttpEntity<String> kiriman) throws Exception {
-        Uaspws datas = new Uaspws();
+        @RequestMapping(value ="/DELETE", method = RequestMethod.DELETE, consumes = APPLICATION_JSON_VALUE)
+    public String deleteData(HttpEntity<String> kiriman) throws Exception{
+        String message="no action";
+        String json_receive = kiriman.getBody();
         ObjectMapper mapper = new ObjectMapper();
-        mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        dctrl.destroy(datas.getId());
-        return "id:"+datas.getId()+" deleted";
+        Uaspws newdatas = new Uaspws(); //jika ingin banyak data pake List atau ArrayList     
+        newdatas = mapper.readValue(json_receive, Uaspws.class);
+        dctrl.destroy(newdatas.getId());
+        return "deleted";
     }
     
     @GetMapping("/GET")
