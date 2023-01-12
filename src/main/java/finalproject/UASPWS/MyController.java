@@ -5,16 +5,13 @@
  */
 package finalproject.UASPWS;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.http.HttpEntity;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,6 +23,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @CrossOrigin
+
+//Nama : Febriyanti Azahra ABidin
+//Nim  : 20200140126
 public class MyController {
     UaspwsJpaController dctrl = new UaspwsJpaController();
     
